@@ -22,21 +22,26 @@ bmp280.config({
   standby: 4                  // 0 - 0.5ms, 1 - 62.5ms, 2 - 125ms, 3 - 250ms, 4 - 500ms, 5 - 1000ms, 6 - 2000ms, 7 - 4000ms
 })
 
-console.log(`Reading sensors`);
-bmp280
-  .readSensors()
-  .then(data => {
-    console.log(`Temperture:\t${data.Temperature}`)
-    console.log(`Pressure:\t${data.Pressure}`)
-    console.log(`Altitude:\t${getAltitude(data.Pressure)}`)
-  })
-  .then(() => {
-    bmp280.close()
-  })
-  .catch(err => {
-    console.log(err)
-    bmp280.close()
-  })
+console.log(`Reading sensors`)
+setInterval(async () => {
+  const { Temperature, Pressure, Altitude } = await getValues()
+  console.log(`Temperture:\t${Temperature}`)
+  console.log(`Pressure:\t${Pressure}`)
+  console.log(`Altitude:\t${Altitude}`)
+}, 1000)
+
+function getValues() {
+  return bmp280
+    .readSensors()
+    .then(data => {
+      const Altitude = getAltitude(data.Pressure)
+      return { ...data, Altitude }
+    })
+    .catch(err => {
+      console.log(err)
+      bmp280.close()
+    })
+}
 
 process.on("SIGINT", () => {
   bmp280.close()
