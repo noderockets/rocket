@@ -6,7 +6,7 @@ const OPTIONS = {
   i2cAddress: 0x76,           // defaults to 0x76
   verbose: true
 }
-const bmp280 = new BMP280(options);
+const bmp280 = new BMP280(OPTIONS);
 
 const SEA_LEVEL_PRESSURE = 101325
 const ALTITUDE_PRESSURE_CONSTANTS = {
