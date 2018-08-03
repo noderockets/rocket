@@ -4,11 +4,11 @@ const pulseWidth = 1000
 const pulseRange = 1000
 const increment = 100
 
-function setHigh() {
+function setLow() {
   motor.servoWrite(pulseWidth)
 }
 
-function setLow() {
+function setHigh() {
   motor.servoWrite(pulseWidth + pulseRange)
 }
 
