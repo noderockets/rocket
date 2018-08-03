@@ -8,7 +8,7 @@ const OPTIONS = {
 }
 const bmp280 = new BMP280(OPTIONS)
 
-const SEA_LEVEL_PRESSURE = 101325
+const SEA_LEVEL_PRESSURE = 1013.25
 const ALTITUDE_PRESSURE_CONSTANTS = {
   n1: 44330,
   n2: 0.1903
@@ -24,14 +24,8 @@ bmp280.config({
 
 let zero = 0
 
-function getAltitudeX (pressure) {
-  const { n1, n2 } = ALTITUDE_PRESSURE_CONSTANTS
-  return n1 * (1.0 - Math.pow(pressure / SEA_LEVEL_PRESSURE, n2)) - zero
-}
-
 function getAltitude(pressure, tempurature) {
   const { n1, n2 } = ALTITUDE_PRESSURE_CONSTANTS
-  const SEA_LEVEL_PRESSURE = 1013.25
   return ((Math.pow((SEA_LEVEL_PRESSURE / pressure), n2) - 1.0) * (tempurature + 273.15)) / 0.0065
 }
 
