@@ -8,14 +8,13 @@ io.set('log level', 1);
 
 app.use(express.static(__dirname + '/www'));
 
-const Rocket = require('./rocket');
-const rocket = new Rocket();
+const rocket = require('./rocket');
 
 require('./strategy/detect-launch')(rocket);
 require('./strategy/parachute-timer')(rocket);
 //require('./strategy/parachute-apogee')(rocket);
 
-rocket.on('data', function(data) {
+rocket.events.on('data', function(data) {
   io.sockets.emit('rocket-data', data)
 });
 
