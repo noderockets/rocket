@@ -38,7 +38,6 @@ events.on('altimeter error', function() {
 
 events.on('altimeter data', function() {
   events.emit('data', { ...altimeterData, ...motionData })
-  console.log('altimeter data')
 })
 
 events.once('motion ready', function() {
@@ -53,7 +52,6 @@ events.on('motion error', function() {
 
 events.on('motion data', function() {
   events.emit('data', { ...altimeterData, ...motionData })
-  console.log('motion data')
 })
 
 async function init() {
