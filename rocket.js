@@ -1,81 +1,107 @@
-const motion = require('./driver/mpu9250');
-const altimeter = require('./driver/bmp280');
-const EventEmitter = require('events').EventEmitter;
+const { isEqual } = require('lodash')
+const motion = require('./driver/mpu9250')
+const altimeter = require('./driver/bmp280')
+const servo = require('./driver/servo')
+const EventEmitter = require('events').EventEmitter
 
 // Instantiate and initialize.
-const TEST_DURATION_IN_MS = 1000;
-var events = new EventEmitter();
+const TEST_DURATION_IN_MS = 1000
+const events = new EventEmitter()
+let altimeterReady = false
+let altimeterData
+let motionReady = false
+let motionData
+let parachuteArmed = false
 
+events.on('ready', function() {
+  startSpammingData()
+  console.log('ready')
+})
 
+events.on('data', function(data) {
+  console.log(data)
+})
 
-events.once('motion.ready', function () {
-  console.log('motion.ready');
-  setReady('motion');
-});
+events.on('launched', () => {
+  console.log('launched')
+})
 
-events.on('motion.error', function () {
-  console.log('motion.error');
-});
+events.once('altimeter ready', function() {
+  altimeterReady = true
+  if (motionReady) events.emit('ready')
+  console.log('altimeter ready')
+})
 
-events.on('rocket.ready', function () {
-  console.log('rocket.ready');
-});
+events.on('altimeter error', function() {
+  console.log('altimeter error')
+})
 
-events.on('rocket.data', function (data) {
-  console.log(data);
-});
+events.on('altimeter data', function() {
+  events.emit('data', { ...altimeterData, ...motionData })
+  console.log('altimeter data')
+})
 
-var rocket = {
-  motion: false,
-  altimeter: false
-};
+events.once('motion ready', function() {
+  motionReady = true
+  if (altimeterReady) events.emit('ready')
+  console.log('motion ready')
+})
 
-function setReady(system) {
-  rocket[system] = true;
-  for (var sys in rocket) {
-    if (!rocket[sys]) return;
+events.on('motion error', function() {
+  console.log('motion error')
+})
+
+events.on('motion data', function() {
+  events.emit('data', { ...altimeterData, ...motionData })
+  console.log('motion data')
+})
+
+async function init() {
+  servo.test()
+  altimeterData = await altimeter.getValues()
+  if (altimeterData) events.emit('altimeter ready')
+  else events.emit('altimeter error')
+  motionData = motion.getMotion()
+  if (motionData) events.emit('motion ready')
+  else events.emit('motion error')
+}
+
+function startSpammingData() {
+  setInterval(() => {
+    getAltimeterValues()
+    getMotionValues()
+  }, 20)
+}
+
+function getMotionValues() {
+  data = motion.getMotion()
+  if (!isEqual(data, motionData)) {
+    motionData = data
+    events.emit('motion data', data)
   }
-  events.emit('rocket.ready');
-  rocket.motion = false;
-  rocket.altimeter = false;
-  readData();
 }
 
-function setData(system, data) {
-  rocket[system] = data;
-  for (var sys in rocket) {
-    if (!rocket[sys]) return;
-  }
-  rocket.dt = +new Date;
-  events.emit('rocket.data', rocket);
-  rocket.motion = false;
-  rocket.altimeter = false;
-}
-
-function readData() {
-  setInterval(function () {
-
-    altimeter.read(function (data) {
-      setData('altimeter', data);
-    });
-
-    motion.getMotion6(function (err, data) {
-      setData('motion', adaptData(data));
-    });
-
-  }, 40);
-}
-
-function adaptData(data) {
-  return {
-    ax: data[0],
-    ay: data[1],
-    az: data[2],
-    temp: data[3],
-    gx: data[4],
-    gy: data[5],
-    gz: data[6]
+async function getAltimeterValues() {
+  data = await altimeter.getValues()
+  if (!isEqual(data, altimeterData)) {
+    altimeterData = data
+    events.emit('alimeter data', motionData)
   }
 }
 
-//setTimeout(function() { }, 10000);
+function armParachute() {
+  parachuteArmed = true
+}
+
+function deployParachute() {
+  servo.setHigh()
+}
+
+module.exports = {
+  init,
+  events,
+  getMotionValues,
+  getAltimeterValues,
+  armParachute,
+  deployParachute
+}
