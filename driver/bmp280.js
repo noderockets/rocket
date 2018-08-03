@@ -6,7 +6,7 @@ const OPTIONS = {
   i2cAddress: 0x76,           // defaults to 0x76
   verbose: true
 }
-const bmp280 = new BMP280(OPTIONS);
+const bmp280 = new BMP280(OPTIONS)
 
 const SEA_LEVEL_PRESSURE = 101325
 const ALTITUDE_PRESSURE_CONSTANTS = {
@@ -22,9 +22,11 @@ bmp280.config({
   standby: 4                  // 0 - 0.5ms, 1 - 62.5ms, 2 - 125ms, 3 - 250ms, 4 - 500ms, 5 - 1000ms, 6 - 2000ms, 7 - 4000ms
 })
 
+let zero = 0
+
 function getAltitude (pressure) {
   const { n1, n2 } = ALTITUDE_PRESSURE_CONSTANTS
-  return n1 * (1.0 - Math.pow(pressure / SEA_LEVEL_PRESSURE, n2))
+  return n1 * (1.0 - Math.pow(pressure / SEA_LEVEL_PRESSURE, n2)) - zero
 }
 
 async function getValues() {
@@ -33,11 +35,16 @@ async function getValues() {
   return { altitude, pressure, temperature }
 }
 
+function setZero(val) {
+  zero = val
+}
+
 process.on("SIGINT", () => {
   bmp280.close()
   process.exit()
 })
 
 module.exports = {
+  setZero,
   getValues
 }
