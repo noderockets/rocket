@@ -24,14 +24,20 @@ bmp280.config({
 
 let zero = 0
 
-function getAltitude (pressure) {
+function getAltitudeX (pressure) {
   const { n1, n2 } = ALTITUDE_PRESSURE_CONSTANTS
   return n1 * (1.0 - Math.pow(pressure / SEA_LEVEL_PRESSURE, n2)) - zero
 }
 
+function getAltitude(pressure, tempurature) {
+  const { n1, n2 } = ALTITUDE_PRESSURE_CONSTANTS
+  const SEA_LEVEL_PRESSURE = 1013.25
+  return ((Math.pow((SEA_LEVEL_PRESSURE / pressure), n2) - 1.0) * (tempurature + 273.15)) / 0.0065
+}
+
 async function getValues() {
   const { Pressure: pressure, Temperature: temperature } = await bmp280.readSensors()
-  const altitude = getAltitude(pressure)
+  const altitude = getAltitude(pressure, temperature)
   return { altitude, pressure, temperature }
 }
 
