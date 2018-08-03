@@ -9,6 +9,7 @@ io.set('log level', 1);
 app.use(express.static(__dirname + '/www'));
 
 const rocket = require('./rocket');
+rocket.init()
 
 require('./strategy/detect-launch')(rocket);
 require('./strategy/parachute-timer')(rocket);
