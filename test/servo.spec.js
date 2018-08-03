@@ -1,5 +1,5 @@
 var Gpio = require('pigpio').Gpio,
-  motor = new Gpio(12, {mode: Gpio.OUTPUT}),
+  motor = new Gpio(13, {mode: Gpio.OUTPUT}),
   pulseWidth = 1000,
   increment = 100;
  

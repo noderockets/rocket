@@ -35,25 +35,33 @@ var mpu = new mpu9250({
     //      3 => +/- 16 g
     ACCEL_FS: 3
 })
-if (mpu.initialize()) {
-  setInterval(() => {
-    const motion = mpu.getMotion9()
-    console.log({
-      accelerometer: {
-        x: motion[0],
-        y: motion[1],
-        z: motion[2]        
-      },
-      gyroscope: {
-        x: motion[3],
-        y: motion[4],
-        z: motion[5]        
-      },
-      magnetometer: {
-        x: motion[6],
-        y: motion[7],
-        z: motion[8]
+
+module.exports = function () {
+  if (mpu.initialize()) {
+    return {
+      getMotion: function() {
+        const values = mpu.getMotion9()
+        return {
+          accelerometer: {
+            x: values[0],
+            y: values[1],
+            z: values[2]        
+          },
+          gyroscope: {
+            x: values[3],
+            y: values[4],
+            z: values[5]
+          },
+          magnetometer: {
+            x: values[6],
+            y: values[7],
+            z: values[8]
+          }
+        }
       }
-    })
-  }, 250)
+    }
+  } else {
+    throw new Error('Unable to initialize Motion Sensor!')
+  }
 }
+
