@@ -37,7 +37,8 @@ events.on('altimeter error', function() {
 })
 
 events.on('altimeter data', function() {
-  events.emit('data', { ...altimeterData, ...motionData })
+  const timestamp = +new Date
+  events.emit('data', { ...altimeterData, ...motionData, timestamp })
 })
 
 events.once('motion ready', function() {
@@ -51,7 +52,8 @@ events.on('motion error', function() {
 })
 
 events.on('motion data', function() {
-  events.emit('data', { ...altimeterData, ...motionData })
+  const timestamp = +new Date
+  events.emit('data', { ...altimeterData, ...motionData, timestamp })
 })
 
 async function init() {
