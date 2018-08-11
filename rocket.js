@@ -94,6 +94,11 @@ function armParachute() {
   events.emit('parachute-armed')
 }
 
+function disarmParachute() {
+  parachuteArmed = false
+  event.emit('parachute-disarmed')
+}
+
 function deployParachute() {
   servo.setHigh()
   events.emit('parachute-deployed')

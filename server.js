@@ -32,6 +32,10 @@ rocket.events.on('parachute-deployed', data => {
   io.sockets.emit('parachute-deployed', data)
 })
 
+rocket.events.on('parachute-disarmed', data => {
+  io.sockets.emit('parachute-disarmed', data)
+})
+
 // Socket IO configuration
 io.sockets.on('connection', function(socket) {
   console.log('incoming connection')
@@ -40,6 +44,10 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('arm-parachute', function() {
     rocket.armParachute()
+  })
+
+  socket.on('disarm-parachute', function() {
+    rocket.disarmParachute()
   })
 
   socket.on('deploy-parachute', function() {
