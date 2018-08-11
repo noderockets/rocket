@@ -1,4 +1,4 @@
-var LAUNCH_THRESHOLD = 1
+var LAUNCH_THRESHOLD = 2
 
 module.exports = function(rocket) {
   var firstKnown
