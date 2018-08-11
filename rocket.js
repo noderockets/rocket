@@ -91,10 +91,12 @@ async function getAltimeterValues() {
 
 function armParachute() {
   parachuteArmed = true
+  events.emit('parachute-armed')
 }
 
 function deployParachute() {
   servo.setHigh()
+  events.emit('parachute-deployed')
 }
 
 module.exports = {
