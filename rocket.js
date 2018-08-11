@@ -19,7 +19,7 @@ events.on('ready', function() {
 })
 
 events.on('data', function(data) {
-  console.log(data)
+  process.stdout.write('.')
 })
 
 events.on('launched', () => {
