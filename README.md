@@ -9,3 +9,13 @@ npm install
 sudo node server
 ```
 
+## Building a Rocket
+
+
+## Access Mission Control
+Once you are running the server you should be able to access Mission Control from any browser on the same network using the IP address for the Raspberry Pi.
+
+## Creating a Strategy for launch, parachute deployment, or anything else
+Strategies allow you to control the rocket. There are instructions and example strategies in the deployment folder.
+
+## 
