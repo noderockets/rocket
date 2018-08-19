@@ -1,8 +1,9 @@
 const { isEqual } = require('lodash')
-const motion = require('./driver/mpu9250')
-const altimeter = require('./driver/bmp280')
-const servo = require('./driver/servo')
+const motion = require('./driver/fake-mpu9250')
+const altimeter = require('./driver/fake-bmp280')
+const servo = require('./driver/fake-servo')
 const EventEmitter = require('events').EventEmitter
+const strategyLoader = require('./strategy-loader')
 
 // Instantiate and initialize.
 const TEST_DURATION_IN_MS = 1000

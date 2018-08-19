@@ -1,26 +1,25 @@
-var THRESHOLD = 5;
+var THRESHOLD = 5
 
-module.exports = function (rocket) {
-  console.log('Using apogee detection based strategy');
+module.exports = function(rocket, emitter) {
+  console.log('Using apogee detection based strategy')
 
-  var lastAltitude = Number.MIN_VALUE;
-  var descentCount = 0;
+  var lastAltitude = Number.MIN_VALUE
+  var descentCount = 0
 
   // FIXME - this strategy does weird things to the servo
-  rocket.on('data', function(data) {
+  emitter.on('data', function(data) {
+    if (!data.deployed) {
+      var currentAltitude = data.altitude
 
-    if(!data.deployed) {
-      var currentAltitude = data.altitude;
+      if (lastAltitude > currentAltitude) {
+        descentCount++
 
-      if(lastAltitude > currentAltitude) {
-        descentCount++;
-
-        if(descentCount > THRESHOLD) {
-          rocket.deployParachute();
+        if (descentCount > THRESHOLD) {
+          rocket.deployParachute()
         }
       } else {
-        descentCount = 0;
+        descentCount = 0
       }
     }
-  });
-};
+  })
+}

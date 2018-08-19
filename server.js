@@ -3,18 +3,18 @@ const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io').listen(server)
-
-io.set('log level', 1)
+const StrategyLoader = require('./strategy-loader')
 
 app.use(express.static(__dirname + '/www'))
 
 const rocket = require('./rocket')
 rocket.init()
 
-require('./strategy/detect-launch')(rocket)
-require('./strategy/parachute-timer')(rocket)
-//require('./strategy/parachute-apogee')(rocket);
-require('./strategy/log-launch')(rocket);
+let strategies
+
+rocket.events.on('ready', () => {
+  strategies = new StrategyLoader(rocket)
+})
 
 rocket.events.on('data', data => {
   io.sockets.emit('rocket-data', data)
@@ -58,6 +58,25 @@ io.sockets.on('connection', function(socket) {
 // Routes
 app.get('/', function(req, res) {
   res.sendfile(__dirname + '/www/index.html')
+})
+
+app.get('/api/strategies', function(req, res) {
+  console.log({ endpoint: '/api/strategies' })
+  res.json(strategies.list())
+})
+
+app.get('/api/strategies/activate/:strategy', function(req, res) {
+  console.log({ endpoint: '/api/strategies/activate/:strategy' })
+  const { strategy } = req.params
+  strategies.activate(strategy)
+  res.json(strategies.list())
+})
+
+app.get('/api/strategies/deactivate/:strategy', function(req, res) {
+  console.log({ endpoint: '/api/strategies/deactivate/:strategy' })
+  const { strategy } = req.params
+  strategies.deactivate(strategy)
+  res.json(strategies.list())
 })
 
 // Listen

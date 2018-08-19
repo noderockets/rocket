@@ -1,9 +1,9 @@
 var LAUNCH_THRESHOLD = 2
 
-module.exports = function(rocket) {
+module.exports = function(rocket, emitter) {
   var firstKnown
 
-  rocket.events.on('data', function(data) {
+  emitter.on('data', function(data) {
     var current = data.altitude
 
     if (!firstKnown) {
@@ -11,7 +11,7 @@ module.exports = function(rocket) {
     } else {
       if (current > firstKnown + LAUNCH_THRESHOLD) {
         console.log('detected launch')
-        rocket.events.emit('launched')
+        emitter.emit('launched')
       }
     }
   })

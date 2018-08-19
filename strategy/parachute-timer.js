@@ -1,15 +1,15 @@
 const DELAY = 1500
 
-module.exports = function(rocket) {
+module.exports = function(rocket, emitter) {
   console.log('Using timer based strategy')
 
   function deployParachute () {
     console.log('Deploy parachute now!')
     rocket.deployParachute()
     rocket.disarmParachute()
-    rocket.events.removeListener(delayParachuteDeployment)
+    emitter.removeListener(delayParachuteDeployment)
     setTimeout(() => {
-      rocket.events.on('launched', delayParachuteDeployment)
+      emitter.on('launched', delayParachuteDeployment)
     }, 1000)
   }
 
@@ -18,5 +18,5 @@ module.exports = function(rocket) {
     setTimeout(deployParachute, DELAY)
   }
 
-  rocket.events.on('launched', delayParachuteDeployment)
+  emitter.on('launched', delayParachuteDeployment)
 }
