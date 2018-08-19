@@ -1,0 +1,11 @@
+{
+  "name": "Parachute: Apogee",
+  "description": "Waits for the rocket to start moving downward, then deploys the parachute.",
+  "parameters": {
+    "threshhold": {
+      "description": "Number of measurements to verify rocket is falling",
+      "type": "number",
+      "default": 5
+    }
+  }
+}

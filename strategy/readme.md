@@ -1,6 +1,26 @@
 # Strategies
 
-A strategy can read rocket data events and call rocket functions. This simple strategy watches rocket data events for changes in altitude. If the rocket's altitude ever reaches 2 meters above its starting value it considers it a launch and emits a "launched" event on the rocket.
+A strategy can read rocket data events and call rocket functions. A strategy consists of 1 folder with at least 2 files. The `manifest.json` describes the strategy and what parameters can be tweaked. The `index.js` contains the code for running the strategy.
+
+This simple strategy watches rocket data events for changes in altitude. If the rocket's altitude ever reaches 2 meters above its starting value it considers it a launch and emits a "launched" event on the rocket. The launch threshhold is a parameter that can be tweaked in mission control. It's name in the UI will be `Launch Detection` but it's key in the rocket is `detect-launch`.
+
+strategy/detect-launch
+  |- manifest.json
+  |- index.js
+
+```json
+{
+  "name": "Launch Detection",
+  "description": "This strategy listens to rocket data for altitude changes. Once the rocket starts moving upward, it emits a 'launched' event.",
+  "parameters": {
+    "altitudeDelta": {
+      "description": "Distance in meters",
+      "type": "number",
+      "default": 2
+    }
+  }
+}
+```
 
 ```js
 const LAUNCH_THRESHOLD = 2

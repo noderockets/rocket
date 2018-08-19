@@ -1,0 +1,11 @@
+{
+  "name": "Flight Logs",
+  "description": "Listens for the launched event (typically emitted from detect-launch) and then writes 10 seconds of flight logs out to a file.",
+  "parameters": {
+    "secondsLogged": {
+      "description": "Number of seconds to log",
+      "type": "number",
+      "default": 10
+    }
+  }
+}

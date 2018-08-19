@@ -1,0 +1,11 @@
+{
+  "name": "Launch Detection",
+  "description": "This strategy listens to rocket data for altitude changes. Once the rocket starts moving upward, it emits a 'launched' event.",
+  "parameters": {
+    "altitudeDelta": {
+      "description": "Distance in meters",
+      "type": "number",
+      "default": 2
+    }
+  }
+}
