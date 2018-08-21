@@ -1,21 +1,4 @@
-module.exports = class LaunchDetector {
-  static displayName = 'Detect Launch'
-
-  static description = 'This strategy listens to rocket data for altitude changes. Once the rocket starts moving upward, it emits a "launched" event.'
-
-  static propTypes = {
-    launchThreshold: {
-      description: 'Distance in meters',
-      type: 'number',
-      default: 2
-    },
-    launchDuration: {
-      description: 'Number of milliseconds before allowing another `launched` event.'
-      type: 'number',
-      default: 20000
-    }
-  }
-
+class LaunchDetector {
   rocketDidEmitData (data) {
     if (this.launchEmitted) return
     const current = data.altitude
@@ -31,3 +14,18 @@ module.exports = class LaunchDetector {
     }
   }
 }
+LaunchDetector.displayName = 'Detect Launch'
+LaunchDetector.description = 'This strategy listens to rocket data for altitude changes. Once the rocket starts moving upward, it emits a "launched" event.'
+LaunchDetector.propTypes = {
+  launchThreshold: {
+    description: 'Distance in meters',
+    type: 'number',
+    default: 2
+  },
+  launchDuration: {
+    description: 'Number of milliseconds before allowing another `launched` event.'
+    type: 'number',
+    default: 20000
+  }
+}
+module.exports = LaunchDetector

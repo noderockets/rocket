@@ -1,16 +1,4 @@
-module.exports = class ParachuteApogee {
-  static displayName = 'Parachute: Apogee'
-
-  static description = 'Waits for the rocket to start moving downward, then deploys the parachute.'
-
-  static propTypes = {
-    threshold: {
-      description: 'Number of measurements to verify rocket is falling.',
-      type: 'number',
-      default: 5
-    }
-  }
-
+class ParachuteApogee {
   rocketDidActivate () {
     this.log('Using apogee detection based strategy')
     this.parachuteArmed = true
@@ -46,3 +34,13 @@ module.exports = class ParachuteApogee {
     }
   }
 }
+ParachuteApogee.displayName = 'Parachute: Apogee'
+ParachuteApogee.description = 'Waits for the rocket to start moving downward, then deploys the parachute.'
+ParachuteApogee.propTypes = {
+  threshold: {
+    description: 'Number of measurements to verify rocket is falling.',
+    type: 'number',
+    default: 5
+  }
+}
+module.exports = ParachuteApogee

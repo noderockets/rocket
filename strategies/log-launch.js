@@ -1,18 +1,6 @@
 const fs = require('fs')
 
-module.exports = class LaunchLogger {
-  static displayName = 'Flight Logs'
-
-  static description = 'Listens for the launched event (typically emitted from detect-launch) and then writes 10 seconds of flight logs out to a file.'
-
-  static propTypes = {
-    secondsLogged: {
-      description: 'Number of seconds to log',
-      type: 'number',
-      default: 10
-    }
-  }
-
+class LaunchLogger {
   constructor () {
     this.logs = []
   }
@@ -33,3 +21,13 @@ module.exports = class LaunchLogger {
     }, this.props.secondsLogged * 1000)
   }
 }
+LaunchLogger.displayName = 'Flight Logs'
+LaunchLogger.description = 'Listens for the launched event (typically emitted from detect-launch) and then writes 10 seconds of flight logs out to a file.'
+LaunchLogger.propTypes = {
+  secondsLogged: {
+    description: 'Number of seconds to log',
+    type: 'number',
+    default: 10
+  }
+}
+module.exports = LaunchLogger

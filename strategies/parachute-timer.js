@@ -1,16 +1,4 @@
-module.exports = class ParachuteTimer {
-  static displayName = 'Parachute: Timer'
-
-  static description = 'Listens for the launched event (typically emitted from detect-launch) and then deploys the parachute after a set amount of time.'
-
-  static propTypes = {
-    delay: {
-      description: 'Number of milliseconds to wait after launch before deploying.',
-      type: 'number',
-      default: 1500
-    }
-  }
-
+class ParachuteTimer {
   rocketDidActivate () {
     this.log('Using timer based strategy')
     this.parachuteArmed = true
@@ -35,3 +23,13 @@ module.exports = class ParachuteTimer {
     }, this.props.delay)
   }
 }
+ParachuteTimer.displayName = 'Parachute: Timer'
+ParachuteTimer.description = 'Listens for the launched event (typically emitted from detect-launch) and then deploys the parachute after a set amount of time.'
+ParachuteTimer.propTypes = {
+  delay: {
+    description: 'Number of milliseconds to wait after launch before deploying.',
+    type: 'number',
+    default: 1500
+  }
+}
+module.exports = ParachuteTimer

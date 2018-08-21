@@ -43,7 +43,7 @@ module.exports = class {
 
   /* Built-in Events */
 
-  rocketDidTick (data) {
+  rocketDidEmitData (data) {
     // called on rocket-data
   }
 
