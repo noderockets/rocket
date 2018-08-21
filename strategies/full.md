@@ -1,11 +1,10 @@
-import RocketStrategy from './base-strategy'
-
+```js
 // todo: describe what these are
 // this.error
 // this.log
 // this.emit
 
-module.exports = class LaunchDetector extends RocketStrategy {
+module.exports = class {
   static displayName = 'Strategy Name'
 
   static description = 'Strategy Description'
@@ -26,6 +25,7 @@ module.exports = class LaunchDetector extends RocketStrategy {
 
   strategyDidActivate () {
     // called when strategy is activated; typically directly after constructor is called
+    // this.emit, this.log, and this.error are available here. but not in the constructor
   }
 
   strategyWillReceiveProps (nextProps) {
@@ -37,34 +37,29 @@ module.exports = class LaunchDetector extends RocketStrategy {
     // called when strategy is disabled
   }
 
+  strategyDidCrash () {
+    // called when something goes really wrong. handle the error. if you don't, strategy will be disabled
+  }
+
   /* Built-in Events */
 
   rocketDidTick (data) {
     // called on rocket-data
-    const current = data.altitude
-    if (!this.firstKnown) {
-      this.firstKnown = current
-    } else {
-      if (current > this.firstKnown + this.props.launchThreshold) {
-        this.log('detected launch') // logs to console, and is sent to mission control ui
-        this.emit('launched') // emits a new custom event
-      }
-    }
   }
 
-  parachuteDidArm ()  {
+  parachuteDidArm () {
     // called when the parachute arms
   }
 
-  parachuteDidDeploy ()  {
+  parachuteDidDeploy () {
     // called when the parachute deploys
   }
 
-  parachuteDidDisarm ()  {
+  parachuteDidDisarm () {
     // called when the parachute disarms
   }
 
-  onEvent (name, data) {
+  onEvent (name, data, isCustom) {
     // if an event (custom or built-in) is emitted and there is no handler for it, this will be invoked
     // return false in any of the event handlers above to keep propogating the event
   }
@@ -82,3 +77,4 @@ module.exports = class LaunchDetector extends RocketStrategy {
     // if a custom event is emitted and there is no handler for it, this will be invoked
   }
 }
+```

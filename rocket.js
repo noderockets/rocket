@@ -96,7 +96,7 @@ function armParachute() {
 
 function disarmParachute() {
   parachuteArmed = false
-  event.emit('parachute-disarmed')
+  events.emit('parachute-disarmed')
 }
 
 function deployParachute() {
