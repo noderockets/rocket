@@ -27,7 +27,7 @@ function loadData () {
 }
 
 module.exports = class StrategyManager {
-  constructor (server, rocket, errorHandler) {
+  constructor (rocket, errorHandler) {
     this.rocket = rocket
     this.globalErrorHandler = errorHandler
 
@@ -66,19 +66,19 @@ module.exports = class StrategyManager {
       }
     }
 
-    server.on('activate-strategy', msg => {
+    rocket.on('activate-strategy', msg => {
       this.onActivate(msg)
-      server.emit('strategy-data', this.getAllInfo())
+      rocket.emit('refresh-strategy-data')
     })
 
-    server.on('update-strategy', msg => {
+    rocket.on('update-strategy', msg => {
       this.onUpdate(msg)
-      server.emit('strategy-data', this.getAllInfo())
+      rocket.emit('refresh-strategy-data')
     })
 
-    server.on('deactivate-strategy', msg => {
+    rocket.on('deactivate-strategy', msg => {
       this.onDeactivate(msg)
-      server.emit('strategy-data', this.getAllInfo())
+      rocket.emit('refresh-strategy-data')
     })
 
 
@@ -158,7 +158,7 @@ module.exports = class StrategyManager {
       this.globalErrorHandler(err)
       delete this.activeStrategies[key]
       this.data[key].enabled = false
-      this.server.emit('strategy-data', this.getAllInfo())
+      this.rocket.emit('refresh-strategy-data')
     }
   }
 

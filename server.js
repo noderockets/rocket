@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/www'))
 const rocket = require('./rocket')
 rocket.init()
 
-const strategyManager = new StrategyManager(io.sockets, rocket.events, err => {
+const strategyManager = new StrategyManager(rocket.events, err => {
   console.error('----------------- CRITICAL ERROR -----------------')
   console.error(err)
   if (err.isStrategyError) {
@@ -58,14 +58,17 @@ rocket.events.on('strategy-error', data => {
   io.sockets.emit('strategy-error', data)
 })
 
+rocket.events.on('refresh-strategy-data', () => {
+  io.sockets.emit('strategy-data', strategyManager.getAllInfo())
+})
+
 // Socket IO configuration
 io.sockets.on('connection', function(socket) {
   console.log('incoming connection')
 
   socket.emit('hello', {})
 
-  const info = strategyManager.getAllInfo()
-  socket.emit('strategy-data', info)
+  socket.emit('strategy-data', strategyManager.getAllInfo())
 
   socket.on('arm-parachute', function() {
     rocket.armParachute()
@@ -77,6 +80,18 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('deploy-parachute', function() {
     rocket.deployParachute()
+  })
+
+  socket.on('activate-strategy', msg => {
+    rocket.events.emit('activate-strategy', msg)
+  })
+
+  socket.on('update-strategy', msg => {
+    rocket.events.emit('update-strategy', msg)
+  })
+
+  socket.on('deactivate-strategy', msg => {
+    rocket.events.emit('deactivate-strategy', msg)
   })
 })
 
