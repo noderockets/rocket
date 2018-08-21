@@ -23,7 +23,7 @@ LaunchDetector.propTypes = {
     default: 2
   },
   launchDuration: {
-    description: 'Number of milliseconds before allowing another `launched` event.'
+    description: 'Number of milliseconds before allowing another `launched` event.',
     type: 'number',
     default: 20000
   }
