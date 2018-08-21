@@ -13,25 +13,36 @@ module.exports = class ParachuteApogee {
 
   rocketDidActivate () {
     this.log('Using apogee detection based strategy')
-    this.lastAltitude = Number.MIN_VALUE
-    this.descentCount = 0
-    this.deployed = false;
+    this.parachuteArmed = true
+    this.reset()
   }
 
-  // TODO:: respect parachute disarm/arm (set this.deployed = false)
+  reset() {
+    this.lastAltitude = Number.MIN_VALUE
+    this.descentCount = 0
+  }
+
+  parachuteDidArm () {
+    this.parachuteArmed = true
+  }
+
+  parachuteDidDisarm ()  {
+    this.parachuteArmed = false
+  }
 
   rocketDidEmitData (data) {
-    if (this.deployed) return
+    if (!this.parachuteArmed) return
     var currentAltitude = data.altitude
 
     if (lastAltitude < data.altitude) {
-      descentCount = 0
+      this.descentCount = 0
       return
     }
 
-    if (++descentCount > this.props.threshold) {
+    if (++this.descentCount > this.props.threshold) {
       this.emit('deploy-parachute')
-      this.deployed = true
+      this.emit('disarm-parachute')
+      this.reset()
     }
   }
 }

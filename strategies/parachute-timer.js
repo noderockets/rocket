@@ -13,18 +13,25 @@ module.exports = class ParachuteTimer {
 
   rocketDidActivate () {
     this.log('Using timer based strategy')
+    this.parachuteArmed = true
   }
 
-  // TODO:: respect parachute disarm/arm (set this.deployed = false)
+  parachuteDidArm () {
+    this.parachuteArmed = true
+  }
+
+  parachuteDidDisarm ()  {
+    this.parachuteArmed = false
+  }
 
   rocketLaunched () {
-    if (this.deployed) return
+    if (!this.parachuteArmed) return
     this.log(`Deploying parachute in ${this.props.delay / 1000} second(s)`)
+    this.parachuteArmed = false
     setTimeout(() => {
       this.log('Deploy parachute now!')
       this.emit('deploy-parachute')
       this.emit('disarm-parachute')
-      this.deployed = true
     }, this.props.delay)
   }
 }
