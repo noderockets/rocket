@@ -90,6 +90,7 @@ async function getAltimeterValues() {
 }
 
 function armParachute() {
+  servo.setLow()
   parachuteArmed = true
   events.emit('parachute-armed')
 }
