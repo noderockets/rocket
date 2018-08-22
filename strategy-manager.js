@@ -183,7 +183,7 @@ module.exports = class StrategyManager {
       const retVal = this.safelyInvokeLifecycle(strategy, 'strategyWillReceiveProps', [nextProps])
       if (retVal === false) return
       strategy.props = nextProps
-      this.data[strategyKey].props = nextProps
+      this.data[strategyKey].props[key] = value
       saveData(this.data)
     })
   }

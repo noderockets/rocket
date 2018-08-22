@@ -1,65 +1,22 @@
 # Strategies
 
-A strategy can read rocket data events and call rocket functions. A strategy consists of 1 folder with at least 2 files. The `manifest.json` describes the strategy and what parameters can be tweaked. The `index.js` contains the code for running the strategy.
+A strategy is a class that receives data from the rocket and emits events to the rocket/mission-control based on that data. The rocket automatically loads everything in `strategies/*.js`. These strategies can be enabled and modified through mission control. Check out `example.md` and `full.md` for more info.
 
-This simple strategy watches rocket data events for changes in altitude. If the rocket's altitude ever reaches 2 meters above its starting value it considers it a launch and emits a "launched" event on the rocket. The launch threshhold is a parameter that can be tweaked in mission control. It's name in the UI will be `Launch Detection` but it's key in the rocket is `detect-launch`.
+## Events
 
-strategy/detect-launch
-  |- manifest.json
-  |- index.js
+You can handle rocket events by registering handlers as class methods. You can listen to built-in events with:
+- `rocketDidEmitData(data)`
+- `parachuteDidArm()`
+- `parachuteDidDeploy()`
+- `parachuteDidDisarm()`
+If you don't register these, or if you return false from the class method, the event will propogate down to `onEvent(name, data)`.
 
-```json
-{
-  "name": "Launch Detection",
-  "description": "This strategy listens to rocket data for altitude changes. Once the rocket starts moving upward, it emits a 'launched' event.",
-  "parameters": {
-    "altitudeDelta": {
-      "description": "Distance in meters",
-      "type": "number",
-      "default": 2
-    }
-  }
-}
-```
+Custom events are events that you create and emit in your strategies. They can be registered on strategies as: `rocket${UpperCamelCase(your-event)}`. For example, if you emit the event `did-launch`, then other strategies may register that event with `rocketDidLaunch`. If you don't have a handler, events will bubble up to `onCustomEvent(name, msg)`. If that's not defined, it'll bubble up to `onEvent(name, data, isCustom)`.
 
-```js
-const LAUNCH_THRESHOLD = 2
+## Context
 
-module.exports = function (rocket) {
-  var firstKnown
-
-  rocket.events.on('data', data => {
-    var current = data.altitude
-
-    if (!firstKnown) {
-      firstKnown = current
-    } else {
-      if (current > firstKnown + LAUNCH_THRESHOLD) {
-        console.log('detected launch')
-        rocket.events.emit('launched')
-      }
-    }
-  })
-}
-```
-
-## Rocket APIs
-| Function | Description |
-| -------- | ----------- |
-| armParachute | Tells the rocket that the parachute is ready for deployment |
-| disarmParachute | Tells the rocket that the parachute in not ready for deployment |
-| deployParachute | Deploys the parachute (if the parachute is armed) |
-
-## Rocket Events
-| Event | Description |
-| -------- | ----------- |
-| ready | The rocket has started up and will begin sending data events |
-| data | The rocket has new data |
-| launched | The rocket has launched |
-| altimeter ready | The altimeter has started and will begin sending altitude data |
-| altimeter error | The altimeter has encountered an error |
-| altimeter data | The altimeter has new data |
-| motion ready | The motion sensor has started and will begin sending motion data |
-| motion error | The motion sensor has encountered an error |
-| motion data | the motion sensor has new data |
-
+There are 4 properties/methods available for use anywhere in your strategy with one exception: they are not available in the `constructor(props)`.
+- `this.props`: These are the properties defined in your strategy's `propTypes`.
+- `this.error(err)`: Call this to emit an error to mission control.
+- `this.log(msg)`: Call this to log data to mission control.
+- `this.emit(name, data)`: Invoke this to emit a new custom event.

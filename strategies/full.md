@@ -1,23 +1,5 @@
 ```js
-// todo: describe what these are
-// this.error
-// this.log
-// this.emit
-
-module.exports = class {
-  static displayName = 'Strategy Name'
-
-  static description = 'Strategy Description'
-
-  static propTypes = {
-    propKey: {
-      displayName: 'Prop Name'
-      description: 'Prop Description',
-      type: 'number | string | boolean',
-      default: 'Default Prop Value'
-    }
-  }
-
+class MyStrategy {
   constructor (props) {
     super()
     // called when strategy is created
@@ -77,4 +59,16 @@ module.exports = class {
     // if a custom event is emitted and there is no handler for it, this will be invoked
   }
 }
+MyStrategy.displayName = 'Strategy Name'
+MyStrategy.description = 'Strategy Description'
+MyStrategy.propTypes = {
+  propKey: {
+    displayName: 'Prop Name (optional, will use propKey otherwise)'
+    description: 'Prop Description',
+    type: 'number | string | boolean',
+    default: 'Default Prop Value'
+  }
+}
+
+module.exports = MyStrategy
 ```
