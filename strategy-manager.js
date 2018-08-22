@@ -82,12 +82,12 @@ module.exports = class StrategyManager {
     })
 
 
-    this.rocket.on('data', data => this.onEvent('rocket-data', 'rocketDidEmitData', data))
-    this.rocket.on('parachute-armed', () => this.onEvent('parachute-armed', 'parachuteDidArm'))
-    this.rocket.on('parachute-deployed', () => this.onEvent('parachute-deployed', 'parachuteDidDeploy'))
-    this.rocket.on('parachute-disarmed', () => this.onEvent('parachute-disarmed', 'parachuteDidDisarm'))
+    rocket.on('data', data => this.onEvent('rocket-data', 'rocketDidEmitData', data))
+    rocket.on('parachute-armed', () => this.onEvent('parachute-armed', 'parachuteDidArm'))
+    rocket.on('parachute-deployed', () => this.onEvent('parachute-deployed', 'parachuteDidDeploy'))
+    rocket.on('parachute-disarmed', () => this.onEvent('parachute-disarmed', 'parachuteDidDisarm'))
 
-    this.rocket.on('strategy-custom-event', data => this.onCustomEvent(data.name, data.payload))
+    rocket.on('strategy-custom-event', data => this.onCustomEvent(data.name, data.payload))
   }
 
   createStrategy(key) {
@@ -103,9 +103,9 @@ module.exports = class StrategyManager {
     strategy.props = props
     strategy.emit = (name, payload) => {
       if (!data.enabled) return
-      if (name === 'parachute-armed') return this.emit('parachute-armed')
-      if (name === 'parachute-deployed') return this.emit('parachute-deployed')
-      if (name === 'parachute-disarmed') return this.emit('parachute-disarmed')
+      if (name === 'arm-parachute') return this.emit('arm-parachute')
+      if (name === 'deploy-parachute') return this.emit('deploy-parachute')
+      if (name === 'disarm-parachute') return this.emit('disarm-parachute')
       this.rocket.emit('strategy-custom-event', { key, name, payload })
     }
     strategy.log = payload => {
