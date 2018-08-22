@@ -47,7 +47,7 @@ module.exports = class StrategyManager {
       const savedProps = savedStrat.props || {}
       const propTypes = getInfo(this.strategies[key]).props || {}
       const props = {}
-      for (const key in Object.keys(propTypes)) {
+      for (const key in propTypes) {
         if (key in savedProps) props[key] = savedProps[key]
       }
       const enabled = savedStrat.enabled || false
