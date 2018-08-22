@@ -3,7 +3,6 @@ const motion = require('./driver/fake-mpu9250')
 const altimeter = require('./driver/fake-bmp280')
 const servo = require('./driver/fake-servo')
 const EventEmitter = require('events').EventEmitter
-const strategyLoader = require('./strategy-loader')
 
 // Instantiate and initialize.
 const TEST_DURATION_IN_MS = 1000
@@ -57,8 +56,25 @@ events.on('motion data', function() {
   events.emit('data', { ...altimeterData, ...motionData, timestamp })
 })
 
+events.on('arm-parachute', function() {
+  armParachute()
+})
+
+events.on('disarm-parachute', function() {
+  disarmParachute()
+})
+
+events.on('deploy-parachute', function() {
+  deployParachute()
+})
+
+events.on('reset-parachute', function() {
+  resetParachute()
+})
+
 async function init() {
   servo.test()
+  setTimeout(resetParachute, 2000)
   altimeterData = await altimeter.getValues()
   if (altimeterData) events.emit('altimeter ready')
   else events.emit('altimeter error')
@@ -97,7 +113,12 @@ function armParachute() {
 
 function disarmParachute() {
   parachuteArmed = false
-  event.emit('parachute-disarmed')
+  events.emit('parachute-disarmed')
+}
+
+function resetParachute() {
+  servo.setLow()
+  events.emit('parachute-reset')
 }
 
 function deployParachute() {
@@ -110,6 +131,7 @@ module.exports = {
   events,
   getMotionValues,
   getAltimeterValues,
+  disarmParachute,
   armParachute,
   deployParachute
 }

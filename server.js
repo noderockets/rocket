@@ -3,17 +3,27 @@ const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io').listen(server)
-const StrategyLoader = require('./strategy-loader')
+
+const StrategyManager = require('./strategy-manager')
+
+io.set('log level', 1)
 
 app.use(express.static(__dirname + '/www'))
 
 const rocket = require('./rocket')
 rocket.init()
 
-let strategies
-
-rocket.events.on('ready', () => {
-  strategies = new StrategyLoader(rocket)
+const strategyManager = new StrategyManager(rocket.events, err => {
+  console.error('----------------- CRITICAL ERROR -----------------')
+  console.error(err)
+  if (err.isStrategyError) {
+    console.error(err.originalErr)
+    console.error(err.strategyName)
+    console.error(err.methodName)
+    console.error(err.args)
+    console.error(err.strategyDidCrashError)
+  }
+  console.error('--------------------------------------------------')
 })
 
 rocket.events.on('data', data => {
@@ -36,47 +46,62 @@ rocket.events.on('parachute-disarmed', data => {
   io.sockets.emit('parachute-disarmed', data)
 })
 
+rocket.events.on('strategy-custom-event', data => {
+  io.sockets.emit('strategy-custom-event', data)
+})
+
+rocket.events.on('strategy-log', data => {
+  io.sockets.emit('strategy-log', data)
+})
+
+rocket.events.on('strategy-error', data => {
+  io.sockets.emit('strategy-error', data)
+})
+
+rocket.events.on('refresh-strategy-data', () => {
+  io.sockets.emit('strategy-data', strategyManager.getAllInfo())
+})
+
 // Socket IO configuration
 io.sockets.on('connection', function(socket) {
   console.log('incoming connection')
 
   socket.emit('hello', {})
 
+  socket.emit('strategy-data', strategyManager.getAllInfo())
+
   socket.on('arm-parachute', function() {
-    rocket.armParachute()
+    rocket.events.emit('arm-parachute')
   })
 
   socket.on('disarm-parachute', function() {
-    rocket.disarmParachute()
+    rocket.events.emit('disarm-parachute')
   })
 
   socket.on('deploy-parachute', function() {
-    rocket.deployParachute()
+    rocket.events.emit('deploy-parachute')
+  })
+
+  socket.on('reset-parachute', function() {
+    rocket.events.emit('reset-parachute')
+  })
+
+  socket.on('activate-strategy', msg => {
+    rocket.events.emit('activate-strategy', msg)
+  })
+
+  socket.on('update-strategy', msg => {
+    rocket.events.emit('update-strategy', msg)
+  })
+
+  socket.on('deactivate-strategy', msg => {
+    rocket.events.emit('deactivate-strategy', msg)
   })
 })
 
 // Routes
 app.get('/', function(req, res) {
   res.sendfile(__dirname + '/www/index.html')
-})
-
-app.get('/api/strategies', function(req, res) {
-  console.log({ endpoint: '/api/strategies' })
-  res.json(strategies.list())
-})
-
-app.get('/api/strategies/activate/:strategy', function(req, res) {
-  console.log({ endpoint: '/api/strategies/activate/:strategy' })
-  const { strategy } = req.params
-  strategies.activate(strategy)
-  res.json(strategies.list())
-})
-
-app.get('/api/strategies/deactivate/:strategy', function(req, res) {
-  console.log({ endpoint: '/api/strategies/deactivate/:strategy' })
-  const { strategy } = req.params
-  strategies.deactivate(strategy)
-  res.json(strategies.list())
 })
 
 // Listen
