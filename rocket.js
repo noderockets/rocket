@@ -56,6 +56,18 @@ events.on('motion data', function() {
   events.emit('data', { ...altimeterData, ...motionData, timestamp })
 })
 
+events.on('arm-parachute', function() {
+  armParachute()
+})
+
+events.on('disarm-parachute', function() {
+  disarmParachute()
+})
+
+events.on('deploy-parachute', function() {
+  deployParachute()
+})
+
 async function init() {
   servo.test()
   altimeterData = await altimeter.getValues()
