@@ -12,7 +12,7 @@ class LaunchLogger {
 
   rocketLaunched () {
     setTimeout(() => {
-      const file = `/log/${this.logs[0].timestamp}`
+      const file = `${__dirname}/../log/${this.logs[0].timestamp}`
       const data = JSON.stringify(this.logs)
       fs.writeFile(file, data, err => {
         if (err) return this.error(err)
