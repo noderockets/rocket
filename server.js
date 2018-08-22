@@ -71,15 +71,19 @@ io.sockets.on('connection', function(socket) {
   socket.emit('strategy-data', strategyManager.getAllInfo())
 
   socket.on('arm-parachute', function() {
-    rocket.armParachute()
+    rocket.events.emit('arm-parachute')
   })
 
   socket.on('disarm-parachute', function() {
-    rocket.disarmParachute()
+    rocket.events.emit('disarm-parachute')
   })
 
   socket.on('deploy-parachute', function() {
-    rocket.deployParachute()
+    rocket.events.emit('deploy-parachute')
+  })
+
+  socket.on('reset-parachute', function() {
+    rocket.events.emit('reset-parachute')
   })
 
   socket.on('activate-strategy', msg => {

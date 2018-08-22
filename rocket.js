@@ -68,8 +68,13 @@ events.on('deploy-parachute', function() {
   deployParachute()
 })
 
+events.on('reset-parachute', function() {
+  resetParachute()
+})
+
 async function init() {
   servo.test()
+  setTimeout(resetParachute, 2000)
   altimeterData = await altimeter.getValues()
   if (altimeterData) events.emit('altimeter ready')
   else events.emit('altimeter error')
@@ -102,15 +107,18 @@ async function getAltimeterValues() {
 }
 
 function armParachute() {
-  servo.setLow()
   parachuteArmed = true
   events.emit('parachute-armed')
 }
 
 function disarmParachute() {
-  servo.setLow()
   parachuteArmed = false
   events.emit('parachute-disarmed')
+}
+
+function resetParachute() {
+  servo.setLow()
+  events.emit('parachute-reset')
 }
 
 function deployParachute() {
