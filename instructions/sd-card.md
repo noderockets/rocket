@@ -14,50 +14,27 @@ sh headless_pi_zero_setup/run.sh
 
 This will allow SSH, connect to the Wi-Fi and allow for a USB OTG connection in case Wi-Fi is not available
 
-`sudo raspi-config`
+Install nvm
 
-- 4 Localisation Options
-- I3 Change Keyboard Layout
-- Generic 104-key PC
-- Keyboard layout: Other
-- Country of origin for the keyboard: English (US)
-- Keyboard layout: English (US)
-- Key to function as AltGr: The Default...
-- Compose key: No Compose key
+```
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
 
-- 2 Network Options
-- N2 Wi-fi
-- US
-- ssid
-- password
+Install node 8
 
-check that `/etc/wpa_supplicant/wpa_supplicant.conf` has your changes
+```
+nvm install 8
+nvm use 8
+```
 
-install nvm
-
-install node
+## Install dependencies
 
 `sudo apt-get update`
-`sudo apt-get install git`
+`sudo apt-get install git pigpio python-smbus i2c-tools`
 
-## Install PIGPIO
-
-`sudo apt-get install pigpio`
-
-## Configure SSH
+## Enable i2c
 
 `sudo raspi-config`
-
-- 5 Interfacing Options
-- P2 SSH
-- enable SSH server: Yes
-
-## Install i2c tools
-
-`sudo apt-get install -y python-smbus`
-`sudo apt-get install -y i2c-tools (may be unnecessary)`
-
-sudo raspi-config
 
 - 5 Interfacing Options
 - P5 I2C
