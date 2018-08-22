@@ -174,14 +174,16 @@ module.exports = class StrategyManager {
     })
   }
 
-  onUpdate ({ key, nextProps }) {
-    this.handleError(key, () => {
-      const strategy = this.activeStrategies[key]
+  onUpdate ({ strategyKey, key, value }) {
+    this.handleError(strategyKey, () => {
+      const strategy = this.activeStrategies[strategyKey]
       if (!strategy) throw new Error('Strategy does not exist')
+      const nextProps = { ...strategy.props }
+      nextProps[key] = value
       const retVal = this.safelyInvokeLifecycle(strategy, 'strategyWillReceiveProps', [nextProps])
       if (retVal === false) return
       strategy.props = nextProps
-      this.data[key].props = nextProps
+      this.data[strategyKey].props = nextProps
       saveData(this.data)
     })
   }
