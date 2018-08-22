@@ -109,6 +109,7 @@ module.exports = {
   events,
   getMotionValues,
   getAltimeterValues,
+  disarmParachute,
   armParachute,
   deployParachute
 }

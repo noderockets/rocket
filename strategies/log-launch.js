@@ -6,7 +6,7 @@ class LaunchLogger {
   }
 
   rocketDidEmitData (data) {
-    if (this.logs.length >= 600) this.logs.unshift()
+    if (this.logs.length >= 600) this.logs.shift()
     this.logs.push(data)
   }
 
