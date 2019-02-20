@@ -102,7 +102,7 @@ async function getAltimeterValues() {
   data = await altimeter.getValues()
   if (!isEqual(data, altimeterData)) {
     altimeterData = data
-    events.emit('alimeter data', motionData)
+    events.emit('altimeter data', motionData)
   }
 }
 
