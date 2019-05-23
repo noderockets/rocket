@@ -12,7 +12,7 @@ Use this guide to install Raspbian Lite on your SD Card:
 * Generic 104-key PC
 * Keyboard layout: Other
 * Country of origin for the keyboard: English (US)
-* Keyboard layout: English (US)
+* Keyboard layout: English (US) Alternative International
 * Key to function as AltGr: The Default...
 * Compose key: No Compose key
 
@@ -26,7 +26,8 @@ check that `/etc/wpa_supplicant/wpa_supplicant.conf` has your changes
 
 install nvm
 
-install node
+install node 
+`nvm install v11.15`
 
 `sudo apt-get update`
 `sudo apt-get install git`
