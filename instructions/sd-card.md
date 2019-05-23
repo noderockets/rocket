@@ -7,30 +7,30 @@ Use this guide to install Raspbian Lite on your SD Card:
 ## Configure Raspian
 
 `sudo raspi-config`
-*. 4 Localisation Options
-*. I3 Change Keyboard Layout
-*. Generic 104-key PC
-*. Keyboard layout: Other
-*. Country of origin for the keyboard: English (US)
-*. Keyboard layout: English (US) Alternative International
-*. Key to function as AltGr: The Default...
-*. Compose key: No Compose key
+* 4 Localisation Options
+* I3 Change Keyboard Layout
+* Generic 104-key PC
+* Keyboard layout: Other
+* Country of origin for the keyboard: English (US)
+* Keyboard layout: English (US) Alternative International
+* Key to function as AltGr: The Default...
+* Compose key: No Compose key
 
 `sudo raspi-config`
-*. 2 Network Options
-*. N2 Wi-fi
-*. US
-*. ssid
-*. password
+* 2 Network Options
+* N2 Wi-fi
+* US
+* ssid
+* password
 
 check that `/etc/wpa_supplicant/wpa_supplicant.conf` has your changes
 
 install nvm
 
 install node v8.x.x. 
-*. Node 12 does not have an Arm 6 build yet so it will try to build from source, but after >12 hours it will still fail. 
-*. The `pigpio` library does not support Node 11.
-*. The i2c library is written in Coffeescript and does not support Node 10.
+* Node 12 does not have an Arm 6 build yet so it will try to build from source, but after >12 hours it will still fail. 
+* The `pigpio` library does not support Node 11.
+* The i2c library is written in Coffeescript and does not support Node 10.
 ```nvm install 8```
 
 `sudo apt-get update`
@@ -41,9 +41,9 @@ install node v8.x.x.
 
 ## Configure SSH
 `sudo raspi-config`
-*. 5 Interfacing Options
-*. P2 SSH
-*. enable SSH server: Yes
+* 5 Interfacing Options
+* P2 SSH
+* enable SSH server: Yes
 
 ## Install i2c tools
 `sudo apt-get install -y python-smbus`
@@ -51,9 +51,9 @@ install node v8.x.x.
 
 
 `sudo raspi-config`
-*. 5 Interfacing Options
-*. P5 I2C
-*. enable ARM I2C Interface: Yes
+* 5 Interfacing Options
+* P5 I2C
+* enable ARM I2C Interface: Yes
 
 
 `sudo reboot`
