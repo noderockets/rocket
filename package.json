@@ -24,6 +24,10 @@
     "url": "https://github.com/noderockets/rocket/issues"
   },
   "homepage": "https://github.com/noderockets/rocket#readme",
+  "engineStrict": true,
+  "engines": { 
+    "node": "^8" 
+  },
   "dependencies": {
     "bmp280-sensor": "0.1.3",
     "express": "4.17.0",
