@@ -6,8 +6,6 @@ const io = require('socket.io').listen(server)
 
 const StrategyManager = require('./strategy-manager')
 
-io.set('log level', 1)
-
 app.use(express.static(__dirname + '/www'))
 
 const rocket = require('./rocket')

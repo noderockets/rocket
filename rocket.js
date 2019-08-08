@@ -117,12 +117,12 @@ function disarmParachute() {
 }
 
 function resetParachute() {
-  servo.setLow()
+  servo.setHigh()
   events.emit('parachute-reset')
 }
 
 function deployParachute() {
-  servo.setHigh()
+  servo.setLow()
   events.emit('parachute-deployed')
 }
 

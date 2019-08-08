@@ -15,6 +15,7 @@ function getInfo (Strategy) {
 }
 
 const DATA_FILE = `${__dirname}/strategies/data.json`
+console.log({ DATA_FILE })
 
 function saveData (data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8')
@@ -23,6 +24,7 @@ function saveData (data) {
 function loadData () {
   if (!fs.existsSync(DATA_FILE)) return {}
   const data = fs.readFileSync(DATA_FILE, 'utf8')
+  console.log({ data })
   return JSON.parse(data)
 }
 
@@ -155,6 +157,7 @@ module.exports = class StrategyManager {
     try {
       unsafeMethod()
     } catch (err) {
+      console.log(err)
       this.globalErrorHandler(err)
       delete this.activeStrategies[key]
       this.data[key].enabled = false
