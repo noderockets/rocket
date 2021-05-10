@@ -31,7 +31,7 @@
   "dependencies": {
     "bmp280-sensor": "0.1.3",
     "express": "4.17.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.21",
     "mpu9250": "0.2.1",
     "pigpio": "1.2.2",
     "socket.io": "2.2.0"
